@@ -1,0 +1,30 @@
+<% layout("./layouts/layout.eta") %>
+
+<h1><%= it.shoppingList.name %></h1>
+
+<!-- Form to add items to the shopping list -->
+<form action="/lists/<%= it.shoppingList.id %>/items" method="POST" >
+    <label for="name">Item Name:</label>
+    <input class="form-control" type="text" id="name" name="name" required>
+    <input class="btn btn-secondary" type="submit" id="addItem" value= "Add Item"/>
+</form>
+
+<!-- List of existing items in the shopping list -->
+<h2>Items in the Shopping List:</h2>
+<ul class="list-group">
+    <% it.items.forEach((item) => { %>
+    <li class="list-group-item" id="shopping-list-item">
+        <% if(item.collected == true ) {%>
+        <del> <%= item.name %> </del>
+        <% } else{%>
+         <%= item.name %>
+        <%}%>
+        <form action="/lists/<%= it.shoppingList.id %>/items/<%= item.id %>/collect" method="POST"> 
+        <button class="btn btn-secondary btn-sm" type="submit" id="collect<%= item.id %>">Mark collected!</button> 
+        </form>
+    </li>
+    <% }); %>
+</ul>
+
+<!-- Link to the page with all shopping lists -->
+<a href="/lists">Shopping lists</a>
