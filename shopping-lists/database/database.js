@@ -2,18 +2,14 @@ import {Pool} from 'https://deno.land/x/postgres@v0.17.0/mod.ts';
 import postgres from 'https://deno.land/x/postgresjs@v3.3.5/mod.js';
 
 let sql;
-if (Deno.env.get('DATABASE_URL')) {
-  sql = postgres(Deno.env.get('DATABASE_URL'));
+const databaseUrl = Deno.env.get('DATABASE_URL');
+if (databaseUrl) {
+  sql = postgres(databaseUrl);
 } else {
   sql = postgres({});
-  // sql = postgres({
-  //   username: 'postgres',
-  //   password: '563398',
-  //   database: 'WSD',
-  // });
 }
 const CONCURRENT_CONNECTIONS = 2;
-const connectionPool = new Pool({}, CONCURRENT_CONNECTIONS);
+const connectionPool = new Pool(databaseUrl, CONCURRENT_CONNECTIONS);
 
 const executeQuery = async (query) => {
   const response = {};
